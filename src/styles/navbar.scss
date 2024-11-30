@@ -1,0 +1,35 @@
+@use "sass:math";
+
+nav {
+  .neon-button {
+    background: linear-gradient(90deg, #0ff 0%, #08f 50%, #0ff 100%);
+    color: #fff;
+    text-shadow: 0 0 5px #0ff, 0 0 10px #08f;
+    box-shadow: 0 0 15px #0ff, 0 0 30px #08f;
+    transition: all 0.3s ease;
+    &:hover {
+      background: linear-gradient(90deg, #08f 0%, #0ff 50%, #08f 100%);
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #0ff, 0 0 40px #08f;
+    }
+  }
+}
+
+button, img {
+  transition: all 0.3s ease;
+}
+
+button:hover, img:hover {
+  transform: scale(1.1);
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  nav ul {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+    border-top: 2px solid #0ff;
+  }
+}

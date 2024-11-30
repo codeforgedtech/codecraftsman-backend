@@ -1,0 +1,44 @@
+/* Animation for spinner */
+@keyframes spin-tron {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Animation for glowing text */
+  @keyframes glow-text {
+    0% {
+      text-shadow: 0 0 5px rgba(173, 216, 230, 0.8), 0 0 10px rgba(173, 216, 230, 0.7);
+    }
+    50% {
+      text-shadow: 0 0 20px rgba(173, 216, 230, 1), 0 0 30px rgba(173, 216, 230, 0.7);
+    }
+    100% {
+      text-shadow: 0 0 5px rgba(173, 216, 230, 0.8), 0 0 10px rgba(173, 216, 230, 0.7);
+    }
+  }
+  
+  /* Apply the animations */
+  .loader-spinner {
+    width: 4rem;
+    height: 4rem;
+    border-width: 8px;
+    border-style: dashed;
+    border-color: transparent;
+    border-top-color: #87CEFA; /* Lighter Blue */
+    border-radius: 50%;
+    animation: spin-tron 2s linear infinite;
+  }
+  
+  .loader-text {
+    margin-top: 1rem;
+    color: #87CEFA; /* Lighter Blue */
+    font-size: 1.125rem;
+    font-weight: 600;
+    animation: glow-text 1.5s ease-in-out infinite;
+  }
+  
+  
