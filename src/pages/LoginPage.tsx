@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
- 
+
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
   };
@@ -23,7 +23,7 @@ const LoginPage = () => {
       console.log("Session from supabase.auth.getSession:", data);
 
       // Check session from localStorage
-      const session = localStorage.getItem('supabase.auth.token');
+      const session = localStorage.getItem("supabase.auth.token");
       if (session) {
         const parsedSession = JSON.parse(session);
         console.log("Session from localStorage:", parsedSession);
@@ -42,7 +42,7 @@ const LoginPage = () => {
         console.log("User logged in:", session);
         try {
           // Store session in localStorage
-          localStorage.setItem('supabase.auth.token', JSON.stringify(session)); // Store session as JSON string
+          localStorage.setItem("supabase.auth.token", JSON.stringify(session)); // Store session as JSON string
           console.log("Session stored in localStorage:", session);
         } catch (error) {
           console.error("Error storing session in localStorage:", error);
@@ -50,12 +50,12 @@ const LoginPage = () => {
         navigate("/");
       } else {
         console.log("User logged out");
-        localStorage.removeItem('supabase.auth.token');
+        localStorage.removeItem("supabase.auth.token");
       }
     });
 
     return () => {
-      authListener.data = null; // Cleanup listener
+      authListener.data?.subscription.unsubscribe(); // Cleanup listener
     };
   }, [navigate]);
 
@@ -80,7 +80,7 @@ const LoginPage = () => {
 
       try {
         // Store session manually in localStorage
-        localStorage.setItem('supabase.auth.token', JSON.stringify(data)); // Store session as JSON string
+        localStorage.setItem("supabase.auth.token", JSON.stringify(data)); // Store session as JSON string
         console.log("Session stored in localStorage:", data);
       } catch (error) {
         console.error("Error storing session in localStorage:", error);
@@ -88,8 +88,11 @@ const LoginPage = () => {
 
       // Test: Store a simple value in localStorage to check functionality
       try {
-        localStorage.setItem('testKey', 'testValue');
-        console.log('Test value stored in localStorage:', localStorage.getItem('testKey'));
+        localStorage.setItem("testKey", "testValue");
+        console.log(
+          "Test value stored in localStorage:",
+          localStorage.getItem("testKey")
+        );
       } catch (error) {
         console.error("Error storing test value in localStorage:", error);
       }
@@ -114,7 +117,10 @@ const LoginPage = () => {
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-blue-400 mb-2" htmlFor="email">
+            <label
+              className="block text-sm font-medium text-blue-400 mb-2"
+              htmlFor="email"
+            >
               Email
             </label>
             <input
@@ -129,7 +135,10 @@ const LoginPage = () => {
           </div>
 
           <div className="relative">
-            <label className="block text-sm font-medium text-blue-400 mb-2" htmlFor="password">
+            <label
+              className="block text-sm font-medium text-blue-400 mb-2"
+              htmlFor="password"
+            >
               Password
             </label>
             <input
@@ -141,17 +150,17 @@ const LoginPage = () => {
               placeholder="Enter your password"
               required
             />
-           <button
-  type="button"
-  onClick={togglePasswordVisibility}
-  className="bg-transparent absolute right-1 top-8 text-blue-500"
->
-  {showPassword ? (
-    <EyeSlashIcon className="w-5 h-5" aria-hidden="true" />
-  ) : (
-    <EyeIcon className="w-5 h-5" aria-hidden="true" />
-  )}
-</button>
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="bg-transparent absolute right-1 top-8 text-blue-500"
+            >
+              {showPassword ? (
+                <EyeSlashIcon className="w-5 h-5" aria-hidden="true" />
+              ) : (
+                <EyeIcon className="w-5 h-5" aria-hidden="true" />
+              )}
+            </button>
           </div>
 
           <button
@@ -161,14 +170,21 @@ const LoginPage = () => {
               isLoading
                 ? "bg-blue-300 cursor-not-allowed"
                 : "bg-blue-500 hover:bg-blue-600 text-white border-2 border-blue-500 hover:border-blue-700 focus:ring-2 focus:ring-blue-500"
-            } ${!isLoading ? 'transform hover:scale-105' : ''} `}
+            } ${!isLoading ? "transform hover:scale-105" : ""} `}
           >
-            {isLoading ? <span className="animate-pulse">Logging in...</span> : "Login"}
+            {isLoading ? (
+              <span className="animate-pulse">Logging in...</span>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
 
         <div className="mt-6 text-center text-sm text-gray-400">
-          <p>Powered by <span className="font-semibold text-blue-500">CodeForged Tech</span></p>
+          <p>
+            Powered by{" "}
+            <span className="font-semibold text-blue-500">CodeForged Tech</span>
+          </p>
         </div>
       </div>
     </div>
@@ -176,15 +192,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-
-
-
-
-
-
-
-
-
-
-

@@ -4,7 +4,13 @@ import { useNavigate } from "react-router-dom";
 
 const PostForm = ({ post }: { post: any | null }) => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string;
+    content: string;
+    categories: string[];
+    tags: string[];
+    images: string[];
+  }>({
     title: "",
     content: "",
     categories: [],
@@ -18,11 +24,18 @@ const PostForm = ({ post }: { post: any | null }) => {
   // Hämta kategorier och taggar från databasen (om du har sådana tabeller)
   useEffect(() => {
     const fetchCategoriesAndTags = async () => {
-      const { data: categoriesData, error: categoriesError } = await supabase.from("categories").select("*");
-      const { data: tagsData, error: tagsError } = await supabase.from("tags").select("*");
+      const { data: categoriesData, error: categoriesError } = await supabase
+        .from("categories")
+        .select("*");
+      const { data: tagsData, error: tagsError } = await supabase
+        .from("tags")
+        .select("*");
 
       if (categoriesError || tagsError) {
-        console.error("Error fetching categories/tags", categoriesError || tagsError);
+        console.error(
+          "Error fetching categories/tags",
+          categoriesError || tagsError
+        );
         return;
       }
 
@@ -114,7 +127,9 @@ const PostForm = ({ post }: { post: any | null }) => {
         <label className="block text-blue-400 mb-2">Innehåll</label>
         <textarea
           value={formData.content}
-          onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, content: e.target.value })
+          }
           className="w-full p-2 bg-gray-700 text-white rounded-lg"
         />
       </div>
@@ -125,7 +140,10 @@ const PostForm = ({ post }: { post: any | null }) => {
           onChange={(e) =>
             setFormData({
               ...formData,
-              categories: Array.from(e.target.selectedOptions, (option) => option.value),
+              categories: Array.from(
+                e.target.selectedOptions,
+                (option) => option.value
+              ),
             })
           }
           className="w-full p-2 bg-gray-700 text-white rounded-lg"
@@ -145,7 +163,10 @@ const PostForm = ({ post }: { post: any | null }) => {
           onChange={(e) =>
             setFormData({
               ...formData,
-              tags: Array.from(e.target.selectedOptions, (option) => option.value),
+              tags: Array.from(
+                e.target.selectedOptions,
+                (option) => option.value
+              ),
             })
           }
           className="w-full p-2 bg-gray-700 text-white rounded-lg"
@@ -184,6 +205,3 @@ const PostForm = ({ post }: { post: any | null }) => {
 };
 
 export default PostForm;
-
-
-

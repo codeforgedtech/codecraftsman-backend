@@ -2,9 +2,23 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 
 const Dashboard = () => {
-  const [latestPost, setLatestPost] = useState(null);
-  const [latestComments, setLatestComments] = useState([]);
-  const [latestAds, setLatestAds] = useState([]);
+  interface Post {
+    id: string;
+    title: string;
+    images: string;
+    created_at: string;
+  }
+
+  const [latestPost, setLatestPost] = useState<Post | null>(null);
+  const [latestComments, setLatestComments] = useState<Comment[]>([]);
+  interface Ad {
+    id: string;
+    imageUrl: string;
+    altText: string;
+    created_at: string;
+  }
+
+  const [latestAds, setLatestAds] = useState<Ad[]>([]);
 
   // Fetch the latest data including replies
   useEffect(() => {
@@ -59,7 +73,22 @@ const Dashboard = () => {
   }, []);
 
   // Function to render comments and replies
-  const renderComments = (comments) => {
+  interface Comment {
+    id: string;
+    content: string;
+    user_name: string;
+    created_at: string;
+    replies: Reply[];
+  }
+
+  interface Reply {
+    id: string;
+    content: string;
+    user_name: string;
+    created_at: string;
+  }
+
+  const renderComments = (comments: Comment[]) => {
     return comments.map((comment) => (
       <div key={comment.id} className="mb-4 pl-4 border-l-2 border-gray-700">
         <p className="text-sm text-gray-400">{comment.content}</p>
@@ -76,7 +105,7 @@ const Dashboard = () => {
   };
 
   // Function to render replies
-  const renderReplies = (replies) => {
+  const renderReplies = (replies: Reply[]) => {
     return replies.map((reply) => (
       <div key={reply.id} className="mb-4 pl-4 border-l-2 border-gray-600">
         <p className="text-sm text-gray-300">{reply.content}</p>
@@ -88,23 +117,30 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex-1 justify-center items-center h-screen w-screen bg-black text-blue-500">
+    <div className="flex flex-col md:ml-64 p-6 h-screen bg-black text-blue-500">
       <div className="bg-black p-6 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-semibold text-blue mb-4">Dashboard Overview</h2>
+        <h2 className="text-3xl font-semibold text-blue mb-4">
+          Dashboard Overview
+        </h2>
         <p className="text-gray-300">
-          Here you can manage all your content and settings. Select a section to get started.
+          Here you can manage all your content and settings. Select a section to
+          get started.
         </p>
 
         {/* Latest Updates */}
         <div className="mt-6 bg-gray-900 rounded-lg p-4 border border-blue-400">
-          <h3 className="text-2xl font-semibold text-blue-400 mb-4">Latest Updates</h3>
+          <h3 className="text-2xl font-semibold text-blue-400 mb-4">
+            Latest Updates
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Latest Post */}
             <div className="bg-gray-800 text-white p-4 rounded-lg shadow-lg">
               <h4 className="text-xl font-semibold">Latest Post</h4>
               {latestPost ? (
                 <div>
-                  <p className="text-sm text-gray-400">Title: {latestPost.title}</p>
+                  <p className="text-sm text-gray-400">
+                    Title: {latestPost.title}
+                  </p>
                   <img
                     src={latestPost.images}
                     alt={latestPost.title}
@@ -163,7 +199,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-
-
-

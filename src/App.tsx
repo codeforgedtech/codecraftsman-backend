@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
 import EditPost from "./components/Posts/EditPost";
@@ -8,9 +13,11 @@ import CreatePost from "./components/Posts/CreatePost";
 import ManageCommentsPage from "./pages/ManageCommentsPage";
 import ManageAdsPage from "./pages/ManageAdsPage";
 import Navbar from "./pages/NavBar";
+
 import Dashboard from "./components/DashBoard";
 import ProfilePage from "./components/Profil/ProfilePage";
 import Loader from "./components/Loader";
+import ManageReviewsPage from "./pages/ManageReviewPage";
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -18,16 +25,15 @@ const App: React.FC = () => {
 
   // Visa loader när sidändring sker
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false); // Stänger av loadern efter 3 sekunder (simulerad laddningstid)
-    }, 2000); // Laddningstid på 3 sekunder för demo
-  }, [location]); // Hook triggas varje gång location ändras
+    setLoading(true); // Starta loader vid navigering
+    const timer = setTimeout(() => setLoading(false), 1000); // Laddning i 1 sek
+
+    return () => clearTimeout(timer); // Rensa timeout vid ny navigering
+  }, [location]);
 
   return (
     <div>
-      {loading && <Loader />} {/* Visa loader när vi är i laddningsläge */}
-      
+      {loading && <Loader />} {/* Visa loader vid sidnavigering */}
       <Routes>
         <Route path="/login" element={<LoginPage />} />
 
@@ -41,7 +47,14 @@ const App: React.FC = () => {
               </>
             }
           />
-          <Route path="/edit-post/:postId" element={<EditPost />} />
+          <Route
+            path="/edit-post/:postId"
+            element={
+              <EditPost
+                postId={useLocation().pathname.split("/").pop() || ""}
+              />
+            }
+          />
           <Route
             path="/manage-posts"
             element={
@@ -88,7 +101,15 @@ const App: React.FC = () => {
             }
           />
         </Route>
-
+        <Route
+          path="/manage-reviews"
+          element={
+            <>
+              <Navbar />
+              <ManageReviewsPage />
+            </>
+          }
+        />
         {/* Catch-All Route */}
         <Route path="*" element={<div>404 Page Not Found</div>} />
       </Routes>
@@ -97,4 +118,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-

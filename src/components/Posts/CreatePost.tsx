@@ -42,11 +42,18 @@ const PostList = () => {
     };
 
     const fetchCategoriesAndTags = async () => {
-      const { data: categoriesData, error: categoriesError } = await supabase.from("categories").select("*");
-      const { data: tagsData, error: tagsError } = await supabase.from("tags").select("*");
+      const { data: categoriesData, error: categoriesError } = await supabase
+        .from("categories")
+        .select("*");
+      const { data: tagsData, error: tagsError } = await supabase
+        .from("tags")
+        .select("*");
 
       if (categoriesError || tagsError) {
-        console.error("Error fetching categories/tags", categoriesError || tagsError);
+        console.error(
+          "Error fetching categories/tags",
+          categoriesError || tagsError
+        );
         return;
       }
 
@@ -71,12 +78,14 @@ const PostList = () => {
     // Hämta bilder från Supabase Storage (hämta url:er)
     const imagesUrls = await Promise.all(
       post.images.map(async (imagePath: string) => {
-        const { publicURL, error } = supabase.storage.from("posts").getPublicUrl(imagePath);
-        if (error) {
-          console.error("Error fetching image URL:", error);
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from("posts").getPublicUrl(imagePath);
+        if (!publicUrl) {
+          console.error("Error fetching image URL");
           return "";
         }
-        return publicURL || "";
+        return publicUrl || "";
       })
     );
     setUploadedImages(imagesUrls);
@@ -175,7 +184,9 @@ const PostList = () => {
           </button>
         </div>
 
-        <h2 className="text-3xl font-semibold mb-6 text-blue-400 text-center glow">Inlägg</h2>
+        <h2 className="text-3xl font-semibold mb-6 text-blue-400 text-center glow">
+          Inlägg
+        </h2>
 
         <table className="min-w-full table-auto bg-gray-900 rounded-lg shadow-lg">
           <thead>
@@ -187,7 +198,10 @@ const PostList = () => {
           </thead>
           <tbody>
             {posts.map((post) => (
-              <tr key={post.id} className="hover:bg-gray-800 transition-all duration-200 ease-in-out">
+              <tr
+                key={post.id}
+                className="hover:bg-gray-800 transition-all duration-200 ease-in-out"
+              >
                 <td className="px-6 py-3 text-white">{post.title}</td>
                 <td className="px-6 py-3 text-gray-500">
                   {new Date(post.created_at).toLocaleDateString()}
@@ -215,14 +229,18 @@ const PostList = () => {
 
       {/* Formulär sektion för att skapa eller redigera inlägg */}
       <div className="flex-1 bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-semibold mb-6 text-blue-400">Skapa eller Redigera Inlägg</h2>
+        <h2 className="text-3xl font-semibold mb-6 text-blue-400">
+          Skapa eller Redigera Inlägg
+        </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-blue-400 mb-2">Titel</label>
             <input
               type="text"
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, title: e.target.value })
+              }
               className="w-full p-2 bg-gray-700 text-white rounded-lg"
             />
           </div>
@@ -230,7 +248,9 @@ const PostList = () => {
             <label className="block text-blue-400 mb-2">Innehåll</label>
             <textarea
               value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, content: e.target.value })
+              }
               className="w-full p-2 bg-gray-700 text-white rounded-lg"
             />
           </div>
@@ -241,7 +261,10 @@ const PostList = () => {
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  categories: Array.from(e.target.selectedOptions, (option) => option.value),
+                  categories: Array.from(
+                    e.target.selectedOptions,
+                    (option) => option.value
+                  ),
                 })
               }
               className="w-full p-2 bg-gray-700 text-white rounded-lg"
@@ -261,7 +284,10 @@ const PostList = () => {
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  tags: Array.from(e.target.selectedOptions, (option) => option.value),
+                  tags: Array.from(
+                    e.target.selectedOptions,
+                    (option) => option.value
+                  ),
                 })
               }
               className="w-full p-2 bg-gray-700 text-white rounded-lg"
@@ -280,10 +306,18 @@ const PostList = () => {
               <div className="grid grid-cols-2 gap-4">
                 {uploadedImages.map((url, index) => (
                   <div key={index} className="relative">
-                    <img src={url} alt={`Uploaded ${index}`} className="w-full h-auto rounded-lg" />
+                    <img
+                      src={url}
+                      alt={`Uploaded ${index}`}
+                      className="w-full h-auto rounded-lg"
+                    />
                     <button
                       type="button"
-                      onClick={() => setUploadedImages(uploadedImages.filter((_, i) => i !== index))}
+                      onClick={() =>
+                        setUploadedImages(
+                          uploadedImages.filter((_, i) => i !== index)
+                        )
+                      }
                       className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
                     >
                       X
@@ -315,7 +349,3 @@ const PostList = () => {
 };
 
 export default PostList;
-
-
-
-
