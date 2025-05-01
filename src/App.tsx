@@ -7,9 +7,9 @@ import {
 } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
-import EditPost from "./components/Posts/EditPost";
+
 import ManagePostsPage from "./pages/ManagePostsPage";
-import CreatePost from "./components/Posts/CreatePost";
+
 import ManageCommentsPage from "./pages/ManageCommentsPage";
 import ManageAdsPage from "./pages/ManageAdsPage";
 import Navbar from "./pages/NavBar";
@@ -47,14 +47,7 @@ const App: React.FC = () => {
               </>
             }
           />
-          <Route
-            path="/edit-post/:postId"
-            element={
-              <EditPost
-                postId={useLocation().pathname.split("/").pop() || ""}
-              />
-            }
-          />
+
           <Route
             path="/manage-posts"
             element={
@@ -73,15 +66,7 @@ const App: React.FC = () => {
               </>
             }
           />
-          <Route
-            path="/create-post"
-            element={
-              <>
-                <Navbar />
-                <CreatePost />
-              </>
-            }
-          />
+
           <Route
             path="/manage-comments"
             element={

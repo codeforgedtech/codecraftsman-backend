@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabaseClient"; // Adjust if your supabase client is different
 import { TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
 import ReactQuill from "react-quill"; // Importera Quill-komponenten
