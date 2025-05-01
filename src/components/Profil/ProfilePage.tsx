@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabaseClient";
 
 interface User {
@@ -21,7 +21,8 @@ const ProfilePage: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const { data: userData, error: userError } = await supabase.auth.getUser();
+        const { data: userData, error: userError } =
+          await supabase.auth.getUser();
         if (userError || !userData?.user) {
           throw new Error("Could not fetch user data");
         }
@@ -83,7 +84,7 @@ const ProfilePage: React.FC = () => {
         if (data) {
           profileImageUrl = supabase.storage
             .from("profile-images")
-            .getPublicUrl(filePath).publicURL;
+            .getPublicUrl(filePath).data.publicUrl;
         }
       }
 
@@ -96,7 +97,11 @@ const ProfilePage: React.FC = () => {
       if (error) throw new Error(error.message);
 
       // Successfully updated the profile
-      setUser((prevUser) => ({ ...prevUser!, ...formData, profile_image: profileImageUrl }));
+      setUser((prevUser) => ({
+        ...prevUser!,
+        ...formData,
+        profile_image: profileImageUrl,
+      }));
       setEditMode(false); // Exit edit mode
     } catch (err: any) {
       setError(err.message);
@@ -119,7 +124,9 @@ const ProfilePage: React.FC = () => {
 
   return (
     <div className="h-screen w-screen bg-black text-blue-400 flex flex-col items-center">
-      <h2 className="text-3xl font-semibold mb-6 text-blue-400 text-center mt-12">Profile</h2>
+      <h2 className="text-3xl font-semibold mb-6 text-blue-400 text-center mt-12">
+        Profile
+      </h2>
 
       {/* Profile Info */}
       {user && (
@@ -188,7 +195,9 @@ const ProfilePage: React.FC = () => {
               </div>
 
               <div className="mb-2">
-                <label className="block text-sm font-semibold">Profile Image</label>
+                <label className="block text-sm font-semibold">
+                  Profile Image
+                </label>
                 <input
                   type="file"
                   onChange={handleImageChange}
@@ -229,22 +238,3 @@ const ProfilePage: React.FC = () => {
 };
 
 export default ProfilePage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

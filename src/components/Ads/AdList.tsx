@@ -24,7 +24,7 @@ const AdListWithForm: React.FC = () => {
     altText: "",
     placement: "Header", // Standardplacering
   });
-  const [showAddButton, setShowAddButton] = useState<boolean>(false); // Ny state för att visa knappen "Lägg till Annons"
+  const [showAddForm, setShowAddForm] = useState<boolean>(false); // State för att visa/hide formuläret
 
   useEffect(() => {
     const fetchAds = async () => {
@@ -62,10 +62,12 @@ const AdListWithForm: React.FC = () => {
       altText: ad.altText,
       placement: ad.placement,
     });
-    setShowAddButton(true); // Visa "Lägg till Annons"-knappen när redigera trycks
+    setShowAddForm(true); // Visa formuläret när man vill redigera en annons
   };
 
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -88,7 +90,9 @@ const AdListWithForm: React.FC = () => {
 
         // Uppdatera listan
         setAds((prevAds) =>
-          prevAds.map((ad) => (ad.id === editingAd.id ? { ...ad, ...formData } : ad))
+          prevAds.map((ad) =>
+            ad.id === editingAd.id ? { ...ad, ...formData } : ad
+          )
         );
       } else {
         // Lägg till ny annons
@@ -106,7 +110,7 @@ const AdListWithForm: React.FC = () => {
         altText: "",
         placement: "Header",
       });
-      setShowAddButton(false); // Dölja knappen efter att en annons lagts till/redigerats
+      setShowAddForm(false); // Dölja formuläret efter att en annons lagts till/redigerats
     } catch (err: any) {
       setError(err.message);
     }
@@ -120,7 +124,7 @@ const AdListWithForm: React.FC = () => {
       altText: "",
       placement: "Header",
     });
-    setShowAddButton(false); // Dölja knappen "Lägg till Annons"
+    setShowAddForm(true); // Visa formuläret när man vill lägga till en ny annons
   };
 
   if (loading) {
@@ -140,72 +144,87 @@ const AdListWithForm: React.FC = () => {
   }
 
   return (
-    <div className="flex w-full bg-black text-blue-400">
-      {/* Formulärsektion */}
-      <div className="fixed bottom-0 left-0 w-full max-w-md p-6 bg-gray-900 rounded-lg shadow-lg border border-blue-400 z-50">
-        {showAddButton && (
-          <button
-            onClick={handleAddAdClick}
-            className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-500 transition mb-6"
-          >
-            Lägg till Annons
-          </button>
-        )}
-        <h2 className="text-2xl font-semibold mb-6">
-          {editingAd ? "Redigera Annons" : "Lägg till Annons"}
-        </h2>
-        <form onSubmit={handleFormSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="imageUrl"
-            value={formData.imageUrl}
-            onChange={handleFormChange}
-            placeholder="Bild-URL"
-            className="w-full p-2 rounded-md border border-gray-700 bg-gray-900 text-gray-300"
-          />
-          <input
-            type="text"
-            name="linkUrl"
-            value={formData.linkUrl}
-            onChange={handleFormChange}
-            placeholder="Länk-URL"
-            className="w-full p-2 rounded-md border border-gray-700 bg-gray-900 text-gray-300"
-          />
-          <input
-            type="text"
-            name="altText"
-            value={formData.altText}
-            onChange={handleFormChange}
-            placeholder="Alt-text"
-            className="w-full p-2 rounded-md border border-gray-700 bg-gray-900 text-gray-300"
-          />
-          <select
-            name="placement"
-            value={formData.placement}
-            onChange={handleFormChange}
-            className="w-full p-2 rounded-md border border-gray-700 bg-gray-900 text-gray-300"
-          >
-            <option value="top">Top</option>
-            <option value="bottom">Bottom</option>
-            <option value="sidebar">Sidabar</option>
-            <option value="in-content">In Content</option>
-            <option value="middle">Post Middle</option>
-            <option value="post-top">Post Top</option>
-            <option value="post-bottom">Post Bottom</option>
-          </select>
-          <button
-            type="submit"
-            className="w-full py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-500 transition"
-          >
-            {editingAd ? "Spara Ändringar" : "Lägg till Annons"}
-          </button>
-        </form>
-      </div>
+    <div className="flex w-full bg-black text-blue-400 justify-center items-center">
+      {showAddForm && (
+        <div className="fixed inset-0 z-50 flex justify-center items-center">
+          <div className="w-full max-w-md p-6 bg-gray-900 rounded-lg shadow-lg border border-blue-400">
+            {/* Stäng-knapp */}
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowAddForm(false)} // Stänger formuläret
+                className="bg-red-500 text-white p-2 rounded-full hover:bg-red-400 transition duration-200"
+              >
+                X
+              </button>
+            </div>
+
+            <h2 className="text-2xl font-semibold mb-6 text-center">
+              {editingAd ? "Redigera Annons" : "Lägg till Annons"}
+            </h2>
+            <form onSubmit={handleFormSubmit} className="space-y-4">
+              <input
+                type="text"
+                name="imageUrl"
+                value={formData.imageUrl}
+                onChange={handleFormChange}
+                placeholder="Bild-URL"
+                className="w-full p-2 rounded-md border border-gray-700 bg-gray-900 text-gray-300"
+              />
+              <input
+                type="text"
+                name="linkUrl"
+                value={formData.linkUrl}
+                onChange={handleFormChange}
+                placeholder="Länk-URL"
+                className="w-full p-2 rounded-md border border-gray-700 bg-gray-900 text-gray-300"
+              />
+              <input
+                type="text"
+                name="altText"
+                value={formData.altText}
+                onChange={handleFormChange}
+                placeholder="Alt-text"
+                className="w-full p-2 rounded-md border border-gray-700 bg-gray-900 text-gray-300"
+              />
+              <select
+                name="placement"
+                value={formData.placement}
+                onChange={handleFormChange}
+                className="w-full p-2 rounded-md border border-gray-700 bg-gray-900 text-gray-300"
+              >
+                <option value="top">Top</option>
+                <option value="bottom">Bottom</option>
+                <option value="sidebar">Sidabar</option>
+                <option value="in-content">In Content</option>
+                <option value="middle">Post Middle</option>
+                <option value="post-top">Post Top</option>
+                <option value="post-bottom">Post Bottom</option>
+              </select>
+              <button
+                type="submit"
+                className="w-full py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-500 transition"
+              >
+                {editingAd ? "Spara Ändringar" : "Lägg till Annons"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Annonssektion */}
       <div className="flex-1 p-6 ">
-        <h2 className="text-4xl font-semibold text-center mb-6">Hantera Annonser</h2>
-        <ul className="grid gap-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3  bg-gray-900 rounded-lg shadow-lg border border-blue-400 ">
+        <h2 className="text-4xl font-semibold text-center mb-6">
+          Hantera Annonser
+        </h2>
+
+        <button
+          onClick={handleAddAdClick}
+          className="block mx-auto bg-blue-400 text-black font-semibold py-2 px-6 text-sm rounded-lg shadow-lg hover:bg-blue-300 transition duration-200 mb-6"
+        >
+          Lägg till Annons
+        </button>
+
+        <ul className="mx-auto grid gap-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-4xl bg-gray-900 rounded-lg shadow-lg border border-blue-400 ">
           {ads.map((ad) => (
             <li
               key={ad.id}
@@ -226,18 +245,16 @@ const AdListWithForm: React.FC = () => {
                   className="bg-transparent text-white hover:text-white transition flex items-center"
                 >
                   <PencilIcon className="h-5 w-5 mr-2" />
-                  
                 </button>
                 <button
                   onClick={() => handleDelete(ad.id)}
                   className="bg-transparent text-white hover:text-white transition flex items-center"
                 >
                   <TrashIcon className="h-5 w-5 mr-2" />
-            
                 </button>
               </div>
               <p className="text-xs text-gray-500">
-                Skapad: {new Date(ad.created_at).toLocaleDateString()}
+                Createad: {new Date(ad.created_at).toLocaleDateString()}
               </p>
             </li>
           ))}
@@ -248,11 +265,3 @@ const AdListWithForm: React.FC = () => {
 };
 
 export default AdListWithForm;
-
-
-
-
-
-
-
-
